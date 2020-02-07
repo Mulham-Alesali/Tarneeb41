@@ -68,7 +68,7 @@ public class TerneebGameController : MonoBehaviour
                 winGame(players[winner]);
                 break;
         }
-
+            refreschScore();
         //playing = false;
         }
         
@@ -163,19 +163,27 @@ public class TerneebGameController : MonoBehaviour
     //distribute the cards for the Player
     public IEnumerator DealOutCards()
     {
+        
+
         int index = 0;
         foreach(string card in deck)
         {
+
             GameObject foundCard = GameObject.Find(card);
             //mod 4 because we have 4 players and we should diestribute the cards for all players
             PlayerCards pc = players[index % 4].GetComponent<PlayerCards>();
             pc.cards.Add(foundCard);
             foundCard.GetComponent<UpdateLocation>().targetPosition = pc.playerLocation;
+
+            
             yield return new WaitForSeconds(WAITINGTIME * 3);
-            if(index % 4 == 0)
+            
+            if (index % 4 == 0)
             {
                 foundCard.GetComponent<UpdateSprite>().faceUp = true;
             }
+
+
             index++;
         }
 
@@ -190,4 +198,19 @@ public class TerneebGameController : MonoBehaviour
 
     }
 
+
+
+    private void refreschScore()
+    {
+        List<GameObject> scoresText = new List<GameObject>();
+        scoresText.Add(GameObject.Find("Score0"));
+        scoresText.Add(GameObject.Find("Score1"));
+        scoresText.Add(GameObject.Find("Score2"));
+        scoresText.Add(GameObject.Find("Score3"));
+
+        for(int i = 0;i < 4; i++)
+        {
+            scoresText[i].GetComponent<UnityEngine.UI.Text>().text = scores[i].ToString();
+        }
+    }
 }

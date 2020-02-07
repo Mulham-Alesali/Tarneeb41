@@ -27,6 +27,7 @@ public class ObjectClicker : MonoBehaviour
             {
                 playerLogic.PlayCard(thisCard);
                 playerLogic.humanTurn = false;
+                thisCard.GetComponent<AudioSource>().Play();
             }
         }
     }

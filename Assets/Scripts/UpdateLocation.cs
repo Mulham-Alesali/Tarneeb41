@@ -35,6 +35,12 @@ public class UpdateLocation : MonoBehaviour
 
         if (Vector3.Distance(transform.position, targetPosition) > 0.01)
         {
+            AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+            if (!audioSource.isPlaying && Vector3.Distance(transform.position, targetPosition) > 2)
+            {
+            audioSource.Play();
+            }
+
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
         }
         else
@@ -80,7 +86,8 @@ public class UpdateLocation : MonoBehaviour
 
     public bool isReady()
     {
-        return (Vector3.Distance(transform.position, targetPosition) <= 0.01); 
+        bool ready = (Vector3.Distance(transform.position, targetPosition) <= 0.01);
+        return ready;
     }
 
     public static bool isAllReady()

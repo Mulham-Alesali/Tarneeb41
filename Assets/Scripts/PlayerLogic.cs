@@ -55,7 +55,10 @@ public class PlayerLogic : MonoBehaviour
         }
         else
         {
-            PlayCard(GetBestCard());
+            GameObject bestCard = GetBestCard();
+
+            PlayCard(bestCard);
+            bestCard.GetComponent<AudioSource>().Play();
         }
      
     }
@@ -78,6 +81,7 @@ public class PlayerLogic : MonoBehaviour
         GameObject[] roundCards = tgc.GetComponent<RoundController>().roundCards;
 
         int[] playerCardsRanking = new int[playerCards.Count()];
+        SetController sc = GameObject.Find("Tarneeb Game").GetComponent<SetController>();
 
 
         //        يجب اولا النظر اذا كانت الورقة ممكنة للعب او لا في هذه الحال يجب التقليل من قيمة المتغير المسئول عن تقييم الورقة
@@ -90,7 +94,14 @@ public class PlayerLogic : MonoBehaviour
                 {
                     playerCardsRanking[i] -= 100;
                 }
+
+                //give hight ranking for the trump cards
+                if(playerCards[i].GetComponent<CardInfo>().Suite == sc.trump)
+                {
+                    playerCardsRanking[i] += 10;
+                }
             }
+
         }
 
         //ponus weil es wenig karten von einem Suite gibt
@@ -124,7 +135,7 @@ public class PlayerLogic : MonoBehaviour
                     continue;
                 }
             }
-            foreach (GameObject playedCard in GameObject.Find("Tarneeb Game").GetComponent<SetController>().playedCards)
+            foreach (GameObject playedCard in sc.playedCards)
             {
                 CardInfo playedCardInfo = playedCard.GetComponent<CardInfo>();
 
@@ -162,9 +173,6 @@ public class PlayerLogic : MonoBehaviour
             }
         }
 
-
-
-
             //return the card with the highest ranking
             GameObject result = playerCards[0];
         int indexOfResult = 0;
@@ -176,6 +184,9 @@ public class PlayerLogic : MonoBehaviour
                 indexOfResult = i;
             }
         }
+
+
+       
 
         return result;
     }
@@ -289,6 +300,8 @@ public class PlayerLogic : MonoBehaviour
             }
 
         }
+
+        result--;
 
        if(result < 2)
         {

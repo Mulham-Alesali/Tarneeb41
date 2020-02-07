@@ -127,7 +127,10 @@ public class PlayerCards : MonoBehaviour
 
    public bool isPlayable(GameObject card)
    {
-        
+        if (!cards.Contains(card))
+        {
+            return false;
+        }
         // card.GetComponent<SpriteRenderer>().color = new Color(0xFF, 0xFF, 0xFF);
         RoundController rc = GameObject.Find("Tarneeb Game").GetComponent<RoundController>();
         //if it is the first round

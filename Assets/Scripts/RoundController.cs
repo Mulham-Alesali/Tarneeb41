@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class RoundController : MonoBehaviour
 {
@@ -89,6 +90,7 @@ public class RoundController : MonoBehaviour
             {
                 winCard = roundCards[i];
             }
+
         }
 
         //the winner is the owner of the win card
@@ -121,7 +123,7 @@ public class RoundController : MonoBehaviour
 
         //adding 1 for the trick taker
         sc.tricks[indexOfWinner]++;
-
+        refreshTricks();
         yield return new WaitForSeconds(1);
 
         canStartRound = true;
@@ -147,4 +149,18 @@ public class RoundController : MonoBehaviour
         }
     }
 
+
+    private void refreshTricks()
+    {
+        List<GameObject> tricks = new List<GameObject>();
+        tricks.Add(GameObject.Find("Trick0"));
+        tricks.Add(GameObject.Find("Trick1"));
+        tricks.Add(GameObject.Find("Trick2"));
+        tricks.Add(GameObject.Find("Trick3"));
+        for(int i =0; i<4;i++)
+        {
+            tricks[i].GetComponent<Text>().text = sc.tricks[i].ToString();
+        }
+
+    }
 }

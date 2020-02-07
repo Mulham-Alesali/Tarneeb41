@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class SetController : MonoBehaviour
 {
@@ -43,8 +43,6 @@ public class SetController : MonoBehaviour
         isReady = true;
 
 
-        int trumpRandom = Random.Range(0, 3);
-        trump = TerneebGameController.suits[trumpRandom];
 
 
     }
@@ -54,7 +52,12 @@ public class SetController : MonoBehaviour
     
     public IEnumerator StartSet()
     {
-        yield return new WaitForSeconds(1);
+
+        yield return new WaitForSeconds(2);
+        int trumpRandom = Random.Range(0, 4);
+        trump = TerneebGameController.suits[trumpRandom];
+        GameObject SuiteImage = GameObject.Find("TrumpSuite");
+        SuiteImage.GetComponent<UnityEngine.UI.Image>().sprite = SuiteImage.GetComponent<UpdateSuite>().sprites[trumpRandom];
 
         foreach (GameObject o in tgc.allCards)
         {
@@ -75,6 +78,8 @@ public class SetController : MonoBehaviour
 
             ul.targetPosition = location;
             ul.transform.position = ul.targetPosition;
+
+
         }
 
         canStartSet = false;
@@ -94,16 +99,23 @@ public class SetController : MonoBehaviour
         yield return new WaitUntil(() =>UpdateLocation.isAllReady());
 
         yield return new WaitForSeconds(0f);
-        
+
         //foreach(GameObject p in tgc.players)
         //{
         //    p.GetComponent<PlayerCards>().LocateCards();
         //}
+
+        List<GameObject> bids = new List<GameObject>();
+        bids.Add(GameObject.Find("Bid"));
+        bids.Add(GameObject.Find("Bid (1)"));
+        bids.Add(GameObject.Find("Bid (2)"));
+        bids.Add(GameObject.Find("Bid (3)"));
+
+
         for (int i = 0; i < 4; i++)
         {
             if(turn == 0)
             {
-
                 bidSelector.SetActive(true);
                 yield return new WaitUntil(() => bid[0] > 0);
             }
@@ -112,11 +124,17 @@ public class SetController : MonoBehaviour
             bid[turn] = tgc.players[turn].GetComponent<PlayerLogic>().GetBid();
             
             }
-   
+
+
             turn++; 
             turn %= 4;
         }
         
+        for(int i = 0;i < 4; i++)
+        {
+            bids[i].GetComponent<Text>().text = bid[i].ToString();
+        }
+
         for(int i = 0;i < 13; i++)
         {
          
